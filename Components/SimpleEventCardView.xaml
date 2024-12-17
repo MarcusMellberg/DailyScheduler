@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:DailyScheduler.Components"
+             x:Class="DailyScheduler.Components.SimpleEventCardView"
+             xmlns:models="clr-namespace:DailyScheduler.Models">
+
+    <Frame BorderColor="Transparent" CornerRadius="10" Padding="10" Margin="5" BackgroundColor="#80e3f1bc" HasShadow="False">
+        <Frame.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding Command, Source={RelativeSource AncestorType={x:Type components:SimpleEventCardView}}}"
+                                  CommandParameter="{Binding CommandParameter, Source={RelativeSource AncestorType={x:Type components:SimpleEventCardView}}}" />
+        </Frame.GestureRecognizers>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Titel -->
+            <Label Grid.Row="0" Grid.Column="0" Text="{Binding Title}" FontSize="22" FontAttributes="Bold" HorizontalOptions="Start" Padding="10,0,0,0" />
+
+            <!-- Datum -->
+            <Label Grid.Row="0" Grid.Column="1" Text="{Binding FormattedEventDates}" FontSize="20" Margin="10,0,0,0" HorizontalOptions="End" />
+        </Grid>
+    </Frame>
+</ContentView>

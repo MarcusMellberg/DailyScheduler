@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shell="clr-namespace:Microsoft.Maui.Controls;assembly=Microsoft.Maui.Controls"
+             xmlns:vm="clr-namespace:DailyScheduler.ViewModels"
+             xmlns:components="clr-namespace:DailyScheduler.Components"
+             xmlns:models="clr-namespace:DailyScheduler.Models"
+             xmlns:helpers="clr-namespace:DailyScheduler.Helpers"
+             x:DataType="vm:UpcomingEventsViewModel"
+             x:Class="DailyScheduler.UpcomingEventsPage"
+             Title="Kommande Händelser">
+
+    <shell:Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" />
+    </shell:Shell.BackButtonBehavior>
+
+    <shell:Shell.TitleView>
+        <components:TitleBar HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" />
+    </shell:Shell.TitleView>
+
+    <Grid>
+        <Image Source="images/green_background.jpg"
+               Aspect="AspectFill"
+               IsVisible="True"
+               HorizontalOptions="FillAndExpand"
+               VerticalOptions="FillAndExpand" />
+        <ScrollView>
+            <StackLayout Padding="10">
+                <Label Text="Kommande Händelser"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       Margin="10,10,0,0" />
+                <CollectionView ItemsSource="{Binding GroupedEvents}"
+                                IsGrouped="True">
+                    <CollectionView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding Key}"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="Black"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Start"
+                                   Margin="10,20,10,0" />
+                        </DataTemplate>
+                    </CollectionView.GroupHeaderTemplate>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Event">
+                            <components:SimpleEventCardView BindingContext="{Binding}"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:UpcomingEventsViewModel}}, Path=GotoDetailCommand}"
+                                                            CommandParameter="{Binding .}">
+                            </components:SimpleEventCardView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

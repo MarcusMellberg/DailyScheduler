@@ -1,0 +1,124 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shell="clr-namespace:Microsoft.Maui.Controls;assembly=Microsoft.Maui.Controls"
+             xmlns:vm="clr-namespace:DailyScheduler.ViewModels"
+             xmlns:components="clr-namespace:DailyScheduler.Components"
+             xmlns:models="clr-namespace:DailyScheduler.Models"
+             x:Class="DailyScheduler.EditEventPage"
+             Title="{Binding EventDetail.Title}">
+
+    <shell:Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" />
+    </shell:Shell.BackButtonBehavior>
+
+    <shell:Shell.TitleView>
+        <components:TitleBar HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" />
+    </shell:Shell.TitleView>
+
+    <Grid>
+        <!-- Bakgrundsbild -->
+        <Image Source="images/green_background.jpg"
+               Aspect="AspectFill"
+               IsVisible="True"
+               HorizontalOptions="FillAndExpand"
+               VerticalOptions="FillAndExpand" />
+
+        <Frame BackgroundColor="#80e3f1bc" CornerRadius="10" Padding="10" Margin="10" HasShadow="False">
+            <ScrollView>
+                <Grid RowSpacing="10" ColumnSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Rad 0: Titel och Plats -->
+                    <StackLayout Grid.Row="0" Grid.Column="0">
+                        <Label Text="Titel" FontSize="Medium" TextColor="Black" />
+                        <Entry Text="{Binding EventDetail.Title}" Placeholder="Titel" HeightRequest="40" TextColor="Black" PlaceholderColor="Black" />
+                    </StackLayout>
+                    <StackLayout Grid.Row="0" Grid.Column="1">
+                        <Label Text="Plats" FontSize="Medium" TextColor="Black" />
+                        <Entry Text="{Binding EventDetail.Location}" Placeholder="Plats" HeightRequest="40" TextColor="Black" PlaceholderColor="Black" />
+                    </StackLayout>
+
+                    <!-- Rad 1: Beskrivning -->
+                    <StackLayout Grid.Row="1" Grid.ColumnSpan="2">
+                        <Label Text="Beskrivning" FontSize="Medium" TextColor="Black" />
+                        <Editor Text="{Binding EventDetail.Description}" Placeholder="Beskrivning" AutoSize="TextChanges" MinimumHeightRequest="40" TextColor="Black" PlaceholderColor="Black" />
+                    </StackLayout>
+
+                    <!-- Rad 2: Startdatum, Endast dag och Starttid -->
+                    <StackLayout Grid.Row="2" Grid.Column="0">
+                        <Label Text="Startdatum" FontSize="Medium" TextColor="Black" />
+                        <DatePicker Date="{Binding EventDetail.StartDate}" TextColor="Black" />
+                        <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+                            <Label Text="Endast dag" FontSize="Medium" TextColor="Black" VerticalOptions="Center" />
+                            <Switch IsToggled="{Binding DayOnly}" Scale="0.75" VerticalOptions="Center" />
+                        </StackLayout>
+                    </StackLayout>
+
+                    <StackLayout Grid.Row="2" Grid.Column="1" IsVisible="{Binding StartTimeVisibility}">
+                        <Label Text="Starttid" FontSize="Medium" TextColor="Black" />
+                        <TimePicker Time="{Binding EventDetail.StartTime}" TextColor="Black" />
+                    </StackLayout>
+
+                    <!-- Rad 3: Slutdatum och Sluttid -->
+                    <StackLayout Grid.Row="3" Grid.Column="0" IsVisible="{Binding EndDateVisibility}">
+                        <Label Text="Slutdatum" FontSize="Medium" TextColor="Black" />
+                        <DatePicker Date="{Binding EventDetail.EndDate}" TextColor="Black" />
+                    </StackLayout>
+                    <StackLayout Grid.Row="3" Grid.Column="1" IsVisible="{Binding EndTimeVisibility}">
+                        <Label Text="Sluttid" FontSize="Medium" TextColor="Black" />
+                        <TimePicker Time="{Binding EventDetail.EndTime}" TextColor="Black" />
+                    </StackLayout>
+
+                    <!-- Rad 4: Deltagare -->
+                    <StackLayout Grid.Row="4" Grid.Column="0">
+                        <Label Text="Deltagare" FontSize="Medium" TextColor="Black" />
+                        <CollectionView ItemsSource="{Binding EventDetail.Participants}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:User">
+                                    <StackLayout Orientation="Horizontal" Spacing="5">
+                                        <Label Text="{Binding FullNameWithRole}" TextColor="Black" />
+                                        <Grid WidthRequest="25" HeightRequest="25">
+                                            <Image Source="delete.png" Aspect="AspectFill" />
+                                            <Button Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EditEventViewModel}}, Path=RemoveParticipantCommand}" 
+                                                    CommandParameter="{Binding .}"
+                                                    BackgroundColor="Transparent"
+                                                    BorderColor="Transparent" 
+                                                    CornerRadius="35" />
+                                        </Grid>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+
+                    <StackLayout Grid.Row="4" Grid.Column="1">
+                        <Label Text="Välj ny deltagare" FontSize="Medium" TextColor="Black" />
+                        <Picker ItemsSource="{Binding Users}" 
+                                SelectedItem="{Binding SelectedUser}"
+                                ItemDisplayBinding="{Binding FullNameWithRole}" 
+                                TextColor="Black" 
+                                Title="Välj deltagare" />
+                        <Button Text="Lägg till" TextColor="Black" FontAttributes="Bold" Command="{Binding AddParticipantCommand}" WidthRequest="85" HeightRequest="40" BackgroundColor="#398D01" />
+                    </StackLayout>
+
+                    <!-- Rad 5: Spara och Avbryt-knappar -->
+                    <StackLayout Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="40" Margin="0,30,0,0">
+                        <Button Text="Spara" Command="{Binding SaveEventCommand}" WidthRequest="140" BackgroundColor="#398D01" TextColor="Black" FontAttributes="Bold" />
+                        <Button Text="Avbryt" Command="{Binding CancelCommand}" WidthRequest="140" BackgroundColor="#e74c3c" TextColor="Black" FontAttributes="Bold" />
+                    </StackLayout>
+                </Grid>
+            </ScrollView>
+        </Frame>
+    </Grid>
+</ContentPage>

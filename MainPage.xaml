@@ -1,0 +1,63 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:DailyScheduler.Models"
+             xmlns:vm="clr-namespace:DailyScheduler.ViewModels"
+             xmlns:components="clr-namespace:DailyScheduler.Components"
+             x:DataType="vm:MainViewModel"
+             x:Class="DailyScheduler.MainPage">
+
+    <Shell.TitleView>
+        <components:TitleBar HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" />
+    </Shell.TitleView>
+
+    <Grid>
+        <!-- Bakgrundsbild -->
+        <Image Source="images/green_background.jpg"
+               Aspect="AspectFill"
+               IsVisible="True"
+               HorizontalOptions="FillAndExpand"
+               VerticalOptions="FillAndExpand" />
+
+        <!-- Innehåll -->
+        <ScrollView>
+            <StackLayout Padding="10">
+                <Label Text="Dagens Händelser"
+                       FontSize="22"  
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" />
+                <Label Text="{Binding TodaysDate}" 
+                       FontSize="18"  
+                       HorizontalOptions="Center" />
+
+                <!-- Dagens händelser -->
+                <CollectionView ItemsSource="{Binding TodaysEvents}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Event">
+                            <components:EventCardView BindingContext="{Binding}"
+                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=GotoDetailCommand}"
+                                                      CommandParameter="{Binding .}">
+                            </components:EventCardView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Kommande sju dagar -->
+                <Label Text="Kommande sju dagar"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       Margin="20,10,0,0" />
+                <CollectionView ItemsSource="{Binding ThisWeeksEvents}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Event">
+                            <components:SimpleEventCardView BindingContext="{Binding}"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=GotoDetailCommand}"
+                                                            CommandParameter="{Binding .}">
+                            </components:SimpleEventCardView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

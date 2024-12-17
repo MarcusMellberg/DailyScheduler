@@ -1,0 +1,52 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:DailyScheduler.Components"
+             xmlns:vm="clr-namespace:DailyScheduler.ViewModels"
+             xmlns:shell="clr-namespace:Microsoft.Maui.Controls;assembly=Microsoft.Maui.Controls"
+             x:DataType="vm:DetailsViewModel"
+             x:Class="DailyScheduler.DetailPage"
+             Title="{Binding EventDetail.Title}">
+
+    <shell:Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" />
+    </shell:Shell.BackButtonBehavior>
+
+    <shell:Shell.TitleView>
+        <components:TitleBar HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" />
+    </shell:Shell.TitleView>
+
+    <Grid>
+        <!-- Bakgrundsbild -->
+        <Image Source="images/green_background.jpg"
+               Aspect="AspectFill"
+               IsVisible="True"
+               HorizontalOptions="FillAndExpand"
+               VerticalOptions="FillAndExpand" />
+
+        <!-- Innehåll -->
+        <ScrollView>
+            <VerticalStackLayout Padding="10">
+                <Button Text="Tillbaka" Command="{Binding GoBackCommand}" FontSize="18" BackgroundColor="#cabcf1" TextColor="Black" HorizontalOptions="Start" />
+
+                <Label Text="{Binding FormattedEventDates}" 
+                       FontSize="18" 
+                       FontAttributes="Bold" 
+                       TextColor="Black" 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Start"
+                       Margin="10,20,10,0" />
+
+                <!-- EventCardView Komponent -->
+                <components:EventCardView BindingContext="{Binding EventDetail}" HorizontalOptions="FillAndExpand" VerticalOptions="Start" Margin="0,20,0,0"/>
+
+                <!-- Knappar för redigering och radering -->
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Start" Margin="10,20,10,0">
+                    <Button Text="Redigera" FontSize="18" BackgroundColor="#c9e47d" TextColor="Black" 
+                            Command="{Binding EditEventCommand}" Margin="0,0,10,0" />
+                    <Button Text="Radera" FontSize="18" BackgroundColor="#e74c3c" TextColor="Black" Margin="10,0,0,0"
+                            Command="{Binding ShowDeleteAlertCommand}"/>
+                </StackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
