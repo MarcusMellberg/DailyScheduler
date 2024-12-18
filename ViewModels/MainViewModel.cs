@@ -55,6 +55,14 @@ namespace DailyScheduler.ViewModels
                         }
                     }
 
+                    var sortedEvents = ThisWeeksEvents.OrderBy(e => e.StartDate).ToList();
+
+                    ThisWeeksEvents.Clear();
+                    foreach (var e in sortedEvents)
+                    {
+                        ThisWeeksEvents.Add(e);
+                    }
+
                     Debug.WriteLine($"Events loaded successfully. Total events: {events.Count}");
                 }
                 else
@@ -67,6 +75,8 @@ namespace DailyScheduler.ViewModels
                 Debug.WriteLine($"Error loading events: {ex.Message}");
             }
         }
+
+
 
         [RelayCommand]
         async Task LoadUsersAsync()
